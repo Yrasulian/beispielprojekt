@@ -1,0 +1,40 @@
+name: Node.js CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Repository auschecken
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # 2. Node.js installieren
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Ersetze dies durch die Node.js-Version deines Projekts
+
+      # 3. Abhängigkeiten installieren
+      - name: Install dependencies
+        run: npm install
+
+      # 4. Tests ausführen
+      - name: Run tests
+        run: npm test
+
+      # 5. Optionale Schritte: Linting oder Build (wenn notwendig)
+      - name: Run ESLint (Code-Qualität prüfen)
+        run: npm run lint
+        continue-on-error: true # Überspringt Fehler im Linting
+
+      - name: Build project
+        run: npm run build
